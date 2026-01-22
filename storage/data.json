@@ -1,0 +1,30 @@
+{
+  "cars": [
+    {
+      "id": 1,
+      "make": "Toyota",
+      "model": "Corolla"
+    },
+    {
+      "id": 2,
+      "make": "Honda",
+      "model": "Civic"
+    },
+    {
+      "id": 3,
+      "make": "Ford",
+      "model": "Mustang"
+    },
+    {
+      "id": 4,
+      "make": "BMW",
+      "model": "3 Series"
+    },
+    {
+      "id": 5,
+      "make": "Tesla",
+      "model": "Model 3"
+    }
+  ],
+  "bookings": []
+}

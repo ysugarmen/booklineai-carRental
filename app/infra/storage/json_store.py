@@ -4,7 +4,7 @@ import json
 import os
 import time
 from tempfile import NamedTemporaryFile
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from contextlib import contextmanager
 from pathlib import Path
 from threading import Lock
@@ -19,7 +19,7 @@ class JsonCorruptedError(JsonStoreError):
     """Raised when JSON exists but cannot be parsed."""
 
 
-@dataclass(frozen=True)
+@dataclass
 class JsonStore:
     """
     JSON file store with:
@@ -32,7 +32,7 @@ class JsonStore:
     lock_timeout_s: float = 2.0
     lock_poll_interval_s: float = 0.05
 
-    _mutex: Lock = Lock() # in-process mutex
+    _mutex: Lock = field(default_factory=Lock, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         self.path.parent.mkdir(parents=True, exist_ok=True)
@@ -87,7 +87,7 @@ class JsonStore:
 
                 os.replace(str(tmp_path), str(self.path))
 
-                self._fysync_dir(self.path.parent)
+                self._fsync_dir(self.path.parent)
 
             except OSError as e:
                 raise JsonStoreError(f"Failed to write JSON file: {self.path}") from e

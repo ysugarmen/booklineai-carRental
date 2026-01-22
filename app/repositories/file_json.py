@@ -50,7 +50,7 @@ class FileBookingRepository:
             if booking["car_id"] == car_id
         ]
 
-    def list_by_dates(self, target_date: date) -> Sequence[Booking]:
+    def list_by_date(self, target_date: date) -> Sequence[Booking]:
         bookings_data = self._json_store.read()
         target_date_str = target_date.isoformat()
         bookings: List[Booking] = []

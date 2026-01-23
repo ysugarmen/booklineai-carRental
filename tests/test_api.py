@@ -103,7 +103,6 @@ class TestCreateBooking:
             customer_name="John Doe",
         )
         mock_booking_service.create_booking.return_value = mock_booking
-        mock_booking_service.booking_repository.list_all.return_value = []
         
         payload = {
             "car_id": 1,
@@ -127,7 +126,6 @@ class TestCreateBooking:
         from app.services.bookings import CarNotFoundError
         
         # Arrange
-        mock_booking_service.booking_repository.list_all.return_value = []
         mock_booking_service.create_booking.side_effect = CarNotFoundError(car_id=999)
         
         payload = {
@@ -149,7 +147,6 @@ class TestCreateBooking:
         from app.services.bookings import BookingConflictError
         
         # Arrange
-        mock_booking_service.booking_repository.list_all.return_value = []
         mock_booking_service.create_booking.side_effect = BookingConflictError(
             car_id=1,
             start_date=date(2026, 1, 25),
@@ -172,14 +169,7 @@ class TestCreateBooking:
 
     def test_create_booking_invalid_dates(self, client, mock_booking_service):
         """Should return 422 when end_date is before start_date."""
-        from app.services.bookings import BookingServiceError
-        
-        # Arrange
-        mock_booking_service.booking_repository.list_all.return_value = []
-        mock_booking_service.create_booking.side_effect = BookingServiceError(
-            "End date cannot be before start date."
-        )
-        
+        # Note: With schema validation, this is now caught at the schema level
         payload = {
             "car_id": 1,
             "start_date": "2026-01-27",

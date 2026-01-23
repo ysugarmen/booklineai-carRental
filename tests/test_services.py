@@ -129,7 +129,6 @@ class TestCreateBooking:
             start_date=date(2026, 1, 25),
             end_date=date(2026, 1, 27),
             customer_name="John Doe",
-            booking_id=1,
         )
         
         # Assert
@@ -151,7 +150,6 @@ class TestCreateBooking:
                 start_date=date(2026, 1, 25),
                 end_date=date(2026, 1, 27),
                 customer_name="John Doe",
-                booking_id=1,
             )
         
         assert exc_info.value.car_id == 999
@@ -165,7 +163,6 @@ class TestCreateBooking:
                 start_date=date(2026, 1, 27),
                 end_date=date(2026, 1, 25),
                 customer_name="John Doe",
-                booking_id=1,
             )
         
         assert "before start date" in str(exc_info.value)
@@ -193,7 +190,6 @@ class TestCreateBooking:
                 start_date=date(2026, 1, 25),
                 end_date=date(2026, 1, 28),
                 customer_name="John Doe",
-                booking_id=2,
             )
         
         assert exc_info.value.car_id == 1

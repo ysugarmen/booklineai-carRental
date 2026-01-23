@@ -45,13 +45,12 @@ class BookingService:
         
         booked_car_ids = {
             booking.car_id for booking in self.booking_repository.list_by_date(target_date)
-            if self._covers_date(booking, target_date)
         }
 
         return [car for car in cars if car.id not in booked_car_ids]
     
 
-    def create_booking(self, *, car_id: int, start_date: date, end_date: date, customer_name: str, booking_id: int) -> Booking:
+    def create_booking(self, *, car_id: int, start_date: date, end_date: date, customer_name: str) -> Booking:
         if end_date < start_date:
             raise BookingServiceError("End date cannot be before start date.")
         
@@ -63,7 +62,7 @@ class BookingService:
             raise BookingConflictError(car_id, start_date, end_date)
 
         new_booking = Booking(
-            id=booking_id,
+            id=0,  # Placeholder - repository will assign actual ID atomically
             car_id=car_id,
             start_date=start_date,
             end_date=end_date,

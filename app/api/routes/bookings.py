@@ -17,23 +17,18 @@ logger = get_logger(__name__)
 router = APIRouter(prefix="/bookings", tags=["bookings"])
 
 
-def _next_booking_id(service: BookingService) -> int:
-    """
-    Simple id generation for file-backed store:
-    max(existing)+1.
-    """
-    existing_bookings = service.booking_repository.list_all()
-    max_id = max((booking.id for booking in existing_bookings), default=0)
-    return max_id + 1
-
-
 @router.post("", response_model=BookingResponse, status_code=status.HTTP_201_CREATED)
 def create_booking(
     payload: CreateBookingRequest,
     service: BookingService = Depends(get_booking_service),
 ) -> BookingResponse:
     """
-    Create a new booking.
+    Create a new booking for a car.
+    
+    - **car_id**: ID of the car to book
+    - **start_date**: Booking start date (YYYY-MM-DD)
+    - **end_date**: Booking end date (YYYY-MM-DD)  
+    - **customer_name**: Name of the customer
     """
     logger.info(
         "Booking attempt: car_id=%d, dates=%s to %s, customer=%s",
@@ -42,14 +37,12 @@ def create_booking(
         payload.end_date,
         payload.customer_name,
     )
-    booking_id = _next_booking_id(service)
     try:
         booking = service.create_booking(
             car_id=payload.car_id,
             start_date=payload.start_date,
             end_date=payload.end_date,
             customer_name=payload.customer_name,
-            booking_id=booking_id,
         )
         logger.info(
             "Booking successful: booking_id=%d, car_id=%d, customer=%s",

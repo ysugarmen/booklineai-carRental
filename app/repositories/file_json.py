@@ -61,11 +61,19 @@ class FileBookingRepository:
         return bookings
 
     def add(self, booking: Booking) -> Booking:
+        """Add a booking with atomic ID generation."""
+        new_booking_holder: list[Booking] = []
+        
         def _append_booking(data: dict) -> dict:
             bookings = data.setdefault("bookings", [])
-            bookings.append(booking.model_dump(mode="json"))
+            # Atomic ID generation inside the lock
+            max_id = max((b["id"] for b in bookings), default=0)
+            new_id = max_id + 1
+            booking_with_id = booking.model_copy(update={"id": new_id})
+            bookings.append(booking_with_id.model_dump(mode="json"))
+            new_booking_holder.append(booking_with_id)
             return data
         
         self._json_store.update(_append_booking)
-        return booking
+        return new_booking_holder[0]
         

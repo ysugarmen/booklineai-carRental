@@ -4,7 +4,7 @@ from functools import lru_cache
 
 from app.core.config import get_settings
 from app.repositories.file_json import FileBookingRepository, FileCarRepository
-from app.infra.storage.json_store import JsonStore
+from app.adapters.datasources.json_store import JsonStore
 from app.services.bookings import BookingService
 
 settings = get_settings()

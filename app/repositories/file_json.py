@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import date
 from typing import List, Optional, Sequence
 
-from app.infra.storage.json_store import JsonStore
+from app.adapters.datasources.json_store import JsonStore
 from app.models import Booking, Car
 
 class FileCarRepository:
